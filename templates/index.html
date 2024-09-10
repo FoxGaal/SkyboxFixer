@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en-US">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>pack</title>
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" />
+</head>
+ 
+<body>
+    <div>
+        <div id="status"></div>
+        <div id="progress">
+            <div id="completed"></div>
+            <label for="file_input" id="drop">
+                <input type="file" id="file_input" hidden>
+                <p>Drag and drop or click here<br>to upload images</p>
+                <span> Upload any images from desktop</span>
+            </label>
+        </div>
+        <div id="pic">
+            <canvas id='output'></canvas>
+        </div>
+    </div>
+</body>
+<script src="{{ url_for('static', filename='script.js') }}">
+</script>
+ 
+</html>

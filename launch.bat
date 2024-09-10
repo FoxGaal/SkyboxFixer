@@ -1,3 +1,13 @@
 @echo off
-powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& './launch.ps1'
+if "%1"=="1" goto main
+set /p input=Would you like to run first time setup? (y/N): 
+if "%input%"=="y" goto setup
+:main
+python main.py
 PAUSE>nul
+exit
+:setup
+python setup.py
+echo Setup finished.
+PAUSE
+start launch.bat 1

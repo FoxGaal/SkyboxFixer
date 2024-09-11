@@ -1,1 +1,1 @@
-{"default": [{"engine": "BLENDER_EEVEE", "samples": 64, "resolution": {"x": 1024, "y": 1024}}]}
+{"default": [{"engine": "EEVEE", "samples": 64, "resolution": {"x": 1024, "y": 1024}}]}

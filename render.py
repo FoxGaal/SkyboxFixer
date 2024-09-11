@@ -46,12 +46,13 @@ def render():
             print('Render file name: ' + fileName)
             
             fp = renderPath + "\\" + fileName
-            if engine == 'EEVEE': engine = 'BLENDER_EEVEE_NEXT'
+            # if engine == 'EEVEE': engine = 'BLENDER_EEVEE_NEXT'
 
             bpy.context.scene.render.filepath = fp
             bpy.context.scene.render.resolution_x = resX
             bpy.context.scene.render.resolution_y = resY
             bpy.context.scene.render.engine = engine
+            
 
             if engine == 'CYCLES':
                 bpy.context.scene.cycles.samples = samples

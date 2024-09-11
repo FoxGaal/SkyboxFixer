@@ -39,20 +39,36 @@ def upload_image():
         # Remove the "data:image/png;base64," prefix
         image_data = image_data.split(',')[1]
 
-        # Define the image path
         image_path = os.path.join('textures', "starfield03.png")
 
         # Start a new thread to process the image in the background
         thread = threading.Thread(target=process, args=(image_data, image_path))
         thread.start()
 
-        # Send an immediate response
         return jsonify({'status': 'success', 'message': 'Image is being processed', 'path': image_path})
 
     except Exception as e:
         # Handle exceptions and send error response
         return jsonify({'status': 'error', 'message': str(e)}), 500
     
+def getengines():
+    command = ['blender', '--background', '-E', 'help']
+    result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    output = result.stdout
+
+    # Find the part of the output that lists the engines
+    start_phrase = "Blender Engine Listing:"
+    if start_phrase in output:
+        engines_part = output.split(start_phrase)[1].strip()
+        engines = [line.strip() for line in engines_part.splitlines() if line.strip()]
+        
+        print("Available render engines:")
+        for engine in engines:
+            print(engine)
+        return engines
+    else:
+        print("Render engines not found")
+        return None
 
 def process(image_data, image_path):
     
@@ -60,14 +76,20 @@ def process(image_data, image_path):
     # Decode the image data
     image = Image.open(BytesIO(base64.b64decode(image_data)))
     
+    # Modify render settings to match resolution
     with open("render_settings.json", "r") as jsonFile:
         data = json.load(jsonFile)
         
     size = int(max(image.width/3,image.height/2))
-    # default = data['default']
-    res = data['default'][0]['resolution']
+    default = data['default'][0]
+    res = default['resolution']
     res["x"] = size
     res["y"] = size
+
+    for engine in getengines():
+        print("\""+engine+"\"")
+        print("setting:\""+default['engine']+"\"")
+        if default['engine'] in engine : default['engine'] = engine
 
     with open("render_settings.json", "w") as jsonFile:
         json.dump(data, jsonFile)

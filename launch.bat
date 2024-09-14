@@ -8,5 +8,3 @@ PAUSE>nul
 exit
 :setup
 python setup.py
-PAUSE
-start launch.bat 1

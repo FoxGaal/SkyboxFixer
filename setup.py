@@ -3,7 +3,15 @@ import subprocess
 import re
 import ctypes
 import sys
+import ctypes, sys
+import time
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+    
 HWND_BROADCAST = 0xFFFF
 WM_SETTINGCHANGE = 0x001A
 
@@ -87,25 +95,33 @@ def refresh_environment_variables():
     else:
         print("Environment variables updated. You can now use the Blender command in new terminals.")
 
-result = subprocess.run('pip install flask',
-                            capture_output=True, text=True, shell=True)
-if result.returncode == 0:
-    print("Flask is now installed")
-else :
-    print("Something went wrong while trying to install flask")
 
-result = subprocess.run('pip install pillow',
-                            capture_output=True, text=True, shell=True)
-if result.returncode == 0:
-    print("Pillow is now installed")
-else :
-    print("Something went wrong while trying to install pillow")
 
-blender_base_path = r"C:\Program Files\Blender Foundation"  # Base path where Blender versions are installed
-latest_blender_path = find_latest_blender(blender_base_path)
+if is_admin():
+    result = subprocess.run('pip install flask',
+                                capture_output=True, text=True, shell=True)
+    if result.returncode == 0:
+        print("Flask is now installed")
+    else :
+        print("Something went wrong while trying to install flask")
 
-if latest_blender_path:
-    add_blender_to_system_path(latest_blender_path)
-    
+    result = subprocess.run('pip install pillow',
+                                capture_output=True, text=True, shell=True)
+    if result.returncode == 0:
+        print("Pillow is now installed")
+    else :
+        print("Something went wrong while trying to install pillow")
+
+    blender_base_path = r"C:\Program Files\Blender Foundation"  # Base path where Blender versions are installed
+    latest_blender_path = find_latest_blender(blender_base_path)
+
+    if latest_blender_path:
+        add_blender_to_system_path(latest_blender_path)
+        
+    else:
+        print("No valid Blender versions found. Please Install blender through blender.org NOT microsoft store")
+    print("Setup has finished")
+    time.sleep(5)  
 else:
-    print("No valid Blender versions found. Please Install blender through blender.org NOT microsoft store")
+    # Re-run the program with admin rights
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)

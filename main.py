@@ -87,8 +87,6 @@ def process(image_data, image_path):
     res["y"] = size
 
     for engine in getengines():
-        print("\""+engine+"\"")
-        print("setting:\""+default['engine']+"\"")
         if default['engine'] in engine : default['engine'] = engine
 
     with open("render_settings.json", "w") as jsonFile:

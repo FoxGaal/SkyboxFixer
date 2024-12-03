@@ -17,6 +17,12 @@ const valid_pic_names = [
     "cube_left",
     "cube_up",
     "cube_down",
+    "pz",
+    "px",
+    "nz",
+    "nx",
+    "py",
+    "ny"
 ]
 
 file_input.addEventListener('change', uploadImage);
@@ -105,28 +111,34 @@ const UpdateCanvas = function() {
                 
                 case "cubemap_0":
                 case "cube_back":
+                case "pz" :
                     dx=xsize;
                     dy=ysize;
                     break;
                 case "cubemap_1" :
                 case "cube_right":
+                case "px" :
                     dx=xsize*2;
                     dy=ysize;
                     break;
                 case "cubemap_2" :
                 case "cube_front":
+                case "nz" :
                     dx=xsize*2;
                     break;
                 case "cubemap_3" :
                 case "cube_left":
+                case "nx" :
                     dy=ysize;
                     break;
                 case "cubemap_4" :
                 case "cube_up":
+                case "py" :
                     dx=xsize;
                     break;
                 case "cubemap_5" : 
                 case "cube_down":
+                case "ny" :
                     break;
             }
             context.drawImage(data.Image[i], dx, dy);
@@ -202,6 +214,13 @@ const initiate_events = function () {
         message.textContent=event.data;
         percentage++;
         completed.style.width=100*(percentage/7)+"%";
+
+        getpics();
+    });
+    evtSource.addEventListener("Error", function(event, source=evtSource) {
+        source.close();
+        console.log("closed");
+        message.textContent=event.data;
     });
     
 }
@@ -213,4 +232,9 @@ function uuidv4() {
             v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+}
+function getpics() {
+    for (let download of document.getElementsByClassName('downloads')) {
+        download.click();
+    }
 }

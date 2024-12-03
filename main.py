@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, Response
+from flask import Flask, request, jsonify, render_template, Response, send_file
 import threading
 import base64
 from PIL import Image
@@ -13,6 +13,15 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/<path:filename>', methods=['GET', 'POST'])
+def download_link(filename):
+    response = send_file(filename)
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
 
 subprocess_output = []
 
@@ -40,6 +49,15 @@ def upload_image():
         image_data = image_data.split(',')[1]
 
         image_path = os.path.join('textures', "starfield03.png")
+
+        try :
+            command = ['blender', '--version']
+            subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        except :
+            print('\033[91m'+"Error blender is not in environment variables, are you using microsoft store version? please install from blender.org and run setup"+'\033[0m')
+            send_client_message("Error","Failed to start blender, not installed correctly")
+            return jsonify({'status': 'failed', 'message': 'Blender error'})
+        
 
         # Start a new thread to process the image in the background
         thread = threading.Thread(target=process, args=(image_data, image_path))

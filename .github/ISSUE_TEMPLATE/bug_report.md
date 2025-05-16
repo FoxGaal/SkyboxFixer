@@ -26,6 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Specs (please complete the following information):**
  - OS: [e.g. Windows 11]
  - Browser [e.g. chrome, safari]
+ - Python version
 
 **Additional context**
 Add any other context about the problem here.
